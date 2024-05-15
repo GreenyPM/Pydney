@@ -1,0 +1,5 @@
+go;
+Create Proceedure ServeyDelete
+@Course char(10), @Section char(3), @Term char(6), @Question varchar(200), @Category varchar(100)
+as
+DELETE FROM Survey WHERE Course = @Course and Section = @Section and Term = @Term and Question = @Question and Category = @Category;

@@ -1,0 +1,48 @@
+Table:
+
+Create table StudentSurveyMultipleChoiceResults(
+	SUNYID	char(9),
+	LastName	varchar(100),
+	FirstName	varchar(100),
+	Course	char(10),
+	Section	char(3),
+	Title	varchar(100),
+	Students	int,
+	Term	char(6),
+	Question	varchar(200),
+	Category	varchar(100),
+	Rating	int,
+	CourseRating	decimal(6,2),
+	SchoolRating	decimal(6,2),
+	CollegeRating	decimal(6,2),
+	constraint PK_StudentSurveyMultipleChoiceResults Primary Key (Course, Section, Term, Question, Category)
+)
+
+
+Create Procedure SelectAll
+as
+SELECT * FROM StudentSurveyMultipleChoiceResults
+go;
+
+Create Procedure SelectBasedOnID @SUNYID char(9)
+as 
+SELECT * FROM StudentSurveyMultipleChoiceResults WHERE SUNYID = @SUNYID
+go;
+
+
+Create Proceedure DeleteAll
+as
+DELETE FROM StudentSurveyMultipleChoiceResults
+go;
+
+Create Procedure SurveyUpsert
+@SUNYID char(9), @LastName varchar(100),@FirstName varchar(100), @Course char(10), @Section char(3), @Title varchar(100), @Students int, @Term char(6), @Question varchar(200), @Category varchar(100), @Rating int, @CourseRating decimal(6,2),@SchoolRating decimal(6,2), @CollegeRating decimal(6,2)
+as
+With Source (SUNYID, LastName, FirstName, Course, Section, Title, Students, Term, Question,Category, Rating, CourseRating, SchoolRating, CollegeRating) as (Select @SUNYID, @LastName, @FirstName, @Course, @Section, @Title, @Students, @Term, 	@Question, @Category, @Rating, @CourseRating, @SchoolRating, @CollegeRating)
+Merge StudentSurveyMultipleChoiceResults m using Source s on m.Course = s.Course and m.Section = s.Section and m.Term = s.Term and m.Question = s.Question and m.Category = s.Category
+when not Matched then
+	insert(SUNYID, LastName, FirstName, Course, Section, Title, Students, Term, Question,Category, Rating, CourseRating, SchoolRating, CollegeRating)
+	values(s.SUNYID, s.LastName, s.FirstName, s.Course, s.Section, s.Title, s.Students, s.Term, s.Question, s.Category, s.Rating, s.CourseRating, s.SchoolRating, s.CollegeRating)
+when Matched then
+	update set SUNYID = s.SUNYID, LastName = s.LastName, FirstName = s.FirstName, Title = s.Title, Students = s.Students, Rating = s.Rating, CourseRating = s.CourseRating, SchoolRating = s.SchoolRating, CollegeRating = s.CollegeRating
+Go;

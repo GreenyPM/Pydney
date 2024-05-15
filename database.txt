@@ -1,0 +1,24 @@
+drop table if exists Survey
+drop proc if exists SurveySelect
+drop proc if exists SelectBasedOn
+drop proc if exists SurveyDelete
+drop proc if exists SurveyUpsert
+
+Create table Survey(
+    SUNYID   char(9)
+    ,LastName   varchar(100)
+    ,FirstName   varchar(100)
+    ,Course   char(10)
+    ,Section   char(3)
+    ,Title   varchar(100)
+    ,Students   int
+    ,Term   char(6)
+    ,Question   varchar(200)
+    ,Category   varchar(100)
+    ,Rating   int
+    ,CourseRating   decimal(6,2)
+    ,SchoolRating   decimal(6,2)
+    ,CollegeRating   decimal(6,2)
+    ,constraint PK_Survey Primary Key(Course,Section,Term,Question,Category)
+
+)
